@@ -22,7 +22,7 @@ class _SingleUserState extends State<SingleUser> {
     Response response;
     try {
       isLoading = true;
-      response = await http.getResponse('api/users?page=2');
+      response = await http.getResponse('api/users/2');
       isLoading = false;
       if(response.statusCode == 200){
         setState(() {

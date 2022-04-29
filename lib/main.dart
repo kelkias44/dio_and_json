@@ -1,3 +1,4 @@
+import 'package:dio_and_json/screen/list_user_screen.dart';
 import 'package:dio_and_json/screen/single_user_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,12 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Dio',
       theme: ThemeData(
        
         primarySwatch: Colors.blue,
       ),
-      home: const SingleUser(),
+      home: const ListUser(),
     );
   }
 }
