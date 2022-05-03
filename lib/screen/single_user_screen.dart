@@ -14,8 +14,8 @@ class SingleUser extends StatefulWidget {
 class _SingleUserState extends State<SingleUser> {
 
   HttpService http = HttpService();
-  late SingleUserResponse singleUser;
-  late User user;
+  SingleUserResponse? singleUser;
+  User? user;
   bool isLoading = false;
 
   Future getUser() async {
@@ -23,15 +23,18 @@ class _SingleUserState extends State<SingleUser> {
     try {
       isLoading = true;
       response = await http.getResponse('api/users/2');
-      isLoading = false;
+      // isLoading = false;
       if(response.statusCode == 200){
         setState(() {
           singleUser = SingleUserResponse.fromJson(response.data);
-          user = singleUser.user;
+          user = singleUser!.user;
+          isLoading =false;
           
         });
       }
-      else {print('there is some problem');}
+      else {print('there is some problem');
+      return response;
+      }
     } on Exception catch (e) {
       print(e);
     }
@@ -51,18 +54,19 @@ class _SingleUserState extends State<SingleUser> {
       ),
       body: isLoading ?
        CircularProgressIndicator():
+       user != null ?
        Container(
          width: double.infinity,
          child: Column(
            mainAxisAlignment: MainAxisAlignment.center,
            children: <Widget>[
-             Image.network(user.avatar),
-             Text("${user.id}"),
-             Text(user.firstname + " " + user.lastname),
-             Text(user.email)
+             Image.network(user!.avatar),
+             Text("${user!.id}"),
+             Text(user!.firstname + " " + user!.lastname),
+             Text(user!.email)
            ],
          ),
-       )
+       ) : Text('no user data') 
       
     );
   }

@@ -16,8 +16,8 @@ class ListUser extends StatefulWidget {
 class _ListUserState extends State<ListUser> {
 
   late ListUsersResponse listUsersResponse;
-  late List<User> users;
-  // late User users;
+  late List<User>? users;
+  
 
   HttpService http = HttpService();
   bool isLoading = false;
@@ -27,7 +27,7 @@ class _ListUserState extends State<ListUser> {
     Response response;
     try {
       isLoading = true;
-      response = await http.getResponse('api/users/2');
+      response = await http.getResponse('api/users?page=2');
       isLoading = false;
       if(response.statusCode == 200){
         setState(() {
@@ -41,24 +41,32 @@ class _ListUserState extends State<ListUser> {
       print(e);
     }
   }
+
+  @override
+  void initState(){
+    getUser();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
        appBar: AppBar(
         title: Text('single user'),
       ),
       body: isLoading ?
-       CircularProgressIndicator():
+       CircularProgressIndicator(): 
+       users != null ?
        ListView.builder(
-         itemCount: users.length,
+         itemCount: users!.length,
          itemBuilder: (BuildContext context, index) {
-           final user = users[index];
+           final user = users![index];
            return ListTile(
              title: Text(user.firstname + " " +user.lastname),
              leading: Image.network(user.avatar),
              subtitle: Text(user.email),
            );
-         })
+         }):Text("No user data")
          );
   }
 }

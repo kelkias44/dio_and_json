@@ -3,22 +3,24 @@ import 'package:dio/dio.dart';
 class HttpService{
   var _dio = Dio();
 
-  final baseUrl = 'https://reqres.in/';
+  static const baseUrl = 'https://reqres.in/';
 
    
 
   HttpServices (){
     _dio = Dio(BaseOptions(
-      baseUrl: baseUrl));
-      // initializeInterceptors();
+      // baseUrl: baseUrl
+      ));
+      initializeInterceptors();
   }
    
   Future<Response>getResponse(String endPoint) async {
-    _dio.get(endPoint);
+    // _dio.get(endPoint);
     Response response;
+    Uri url = Uri.parse(baseUrl + endPoint);
 
     try {
-      response = await getResponse(endPoint);
+      response = await _dio.get(baseUrl + endPoint);
     } on DioError catch (e) {
       print(e.message);
       throw Exception(e.message);
@@ -26,18 +28,18 @@ class HttpService{
     return response;
   }
 
-  // initializeInterceptors(){
-  //   _dio.interceptors.add(InterceptorsWrapper(
-  //     onError:(error){
-  //       print(error.message);
-  //       },
-  //     onRequest: (request){
-  //       print(${request.method}${request.path})
-  //       },
-  //     onResponse: (response){
-  //       print(response.data)
-  //       } 
-  //   ))
+  initializeInterceptors(){
+    _dio.interceptors.add(InterceptorsWrapper(
+      onError:(DioError error,ErrorInterceptorHandler handler){
+        print(error.message);
+        },
+      onRequest: (RequestOptions options,RequestInterceptorHandler handler){
+        print(options.method+ " "  + options.path);
+        },
+      onResponse: (Response response, ResponseInterceptorHandler handler){
+        print(response.data);
+        } 
+    ));
+  }
   }
 
-// }

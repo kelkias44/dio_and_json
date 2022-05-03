@@ -21,10 +21,10 @@ class ListUsersResponse{
   int totalPages;
 
   @JsonKey(name: 'data')
-  List<User> Users;
+  List<User> users;
 
   ListUsersResponse({
-    required this.Users, required this.page, required this.perPage, required this.total, required this.totalPages
+    required this.users, required this.page, required this.perPage, required this.total, required this.totalPages
   });
 
   factory ListUsersResponse.fromJson(Map<String, dynamic> json) => _$ListUsersResponseFromJson(json);
